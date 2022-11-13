@@ -17,31 +17,49 @@ class WordGuesserGame
 
   def guess(letter)
     validate(letter)
-     i = 0 
-     j=0
-     k=0
-      while i < word.size
-        if letter.downcase == word[i].downcase 
-          while j<guesses.size
-            if letter.downcase == guesses[j].downcase
-              return false
-            end
-           j +=1 
-          end 
-          @guesses +=letter.downcase
-          display()
-          return true
-        end
-        i += 1
-      end  
-      while k< wrong_guesses.size
-        if letter.downcase == wrong_guesses[k].downcase
-          return false
-        end
-       k +=1 
-      end 
-     @wrong_guesses+=letter.downcase  
-    return false    
+    if !checkCorrect(letter)
+      addFalse(letter)
+      return false
+    end 
+    display()
+    return true
+  end  
+
+  def checkCorrect(letter)
+    i=0
+    while i < word.size
+      if letter.downcase == word[i].downcase 
+        if checkUsed(letter)
+         @guesses +=letter.downcase
+         return true
+        end 
+      end
+      i += 1
+    end  
+    return false
+  end
+
+  def checkUsed(letter)
+    j=0
+    while j<guesses.size
+      if letter.downcase == guesses[j].downcase
+        return false
+      end
+     j +=1 
+    end 
+    return true;
+  end
+
+  def addFalse(letter)
+    k=0
+    while k< wrong_guesses.size
+      if letter.downcase == wrong_guesses[k].downcase
+        return false
+      end
+     k +=1 
+    end 
+   @wrong_guesses+=letter.downcase  
+  return true    
   end  
 
   def display()
@@ -50,7 +68,7 @@ class WordGuesserGame
     while i < word.size
       while j < guesses.size
          if guesses[j] == word[i]
-            word_with_guesses[i]= guesses[j]
+            @word_with_guesses[i]= guesses[j]
          end 
        j+=1
       end
@@ -67,19 +85,20 @@ class WordGuesserGame
       raise ArgumentError.new("Only letters are allowed")
     end
   end 
-
+  
   def  guess_several_letters(game, manyGuess)
     @word = game.word
     @guesses = game.guesses
     @wrong_guesses= game.wrong_guesses
-    @word_with_guesses= game.word_with_guesses
-    i =0
-    while i< manyGuess.size
-     guess(manyGuess[i])
-     i +=1
+   # @word_with_guesses=  '-' * game.word.size
+    a =0
+    while a< manyGuess.size
+       guess(manyGuess[a])
+       a+=1
     end
-
-  end  
+    display()
+    
+  end
   # You can test it by installing irb via $ gem install irb
   # and then running $ irb -I. -r app.rb
   # And then in the irb: irb(main):001:0> WordGuesserGame.get_random_word
