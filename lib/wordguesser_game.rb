@@ -85,6 +85,15 @@ class WordGuesserGame
     unless letter.match?(/[[:alpha:]]/)
       raise ArgumentError.new("Only letters are allowed")
     end
+    
+  end 
+
+  def validateLetter(letter)
+ 
+    unless letter.match?(/[[:alpha:]]/)
+      return false
+    end
+    return true
   end 
   
   def  guess_several_letters(game, manyGuess)
