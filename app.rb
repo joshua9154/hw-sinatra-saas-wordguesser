@@ -22,7 +22,8 @@ class WordGuesserApp < Sinatra::Base
   end
   
   get '/new' do
-    erb :new
+    
+      "Hello World"
   end
   
   post '/create' do
@@ -31,9 +32,9 @@ class WordGuesserApp < Sinatra::Base
     # NOTE: don't change previous line - it's needed by autograder!
 
     @game = WordGuesserGame.new(word)
-    session[:word] = word
-    session[:guesses] = ''
-    session[:wrong_guesses] = ''
+    #session[:word] = word
+    #session[:guesses] = ''
+    #session[:wrong_guesses] = ''
     redirect '/show'
   end
   
@@ -42,24 +43,30 @@ class WordGuesserApp < Sinatra::Base
   # If a guess is invalid, set flash[:message] to "Invalid guess."
   post '/guess' do
     
-    @game.word = session[:word] if @game.word == ''
+    #@game.word = session[:word] if @game.word == ''
     
-    @game.guesses = session[:guesses]
+    #@game.guesses = session[:guesses]
 
-    @game.wrong_guesses = session[:wrong_guesses]
+    #@game.wrong_guesses = session[:wrong_guesses]
 
     letter = params[:guess].to_s[0]
-     response=@game.guess(letter)
-     if !@game.validateLetter(letter)
-      flash[:message] = "Invalid guess."
-     end 
-     if !response
-      flash[:message] = "You have already used that letter."
-     end 
-     if response
-      session[:guesses] = @game.guesses
-      session[:wrong_guesses] = @game.wrong_guesses
-     end 
+    # response=@game.guess(letter)
+   #  if !@game.validateLetter(letter)
+   #   flash[:message] = "Invalid guess."
+   #  end 
+   #  if !response
+   #   flash[:message] = "You have already used that letter."
+   #  end 
+   #  if response
+   #   session[:guesses] = @game.guesses
+   #   session[:wrong_guesses] = @game.wrong_guesses
+   #  end 
+     begin
+      response = @game.guess(letter)
+      flash[:message] = 'You have already used that letter.' if !response
+    rescue ArgumentError
+      flash[:message] = 'Invalid guess.'
+    end
    
     redirect '/show'
   end
@@ -71,16 +78,25 @@ class WordGuesserApp < Sinatra::Base
   # wrong_guesses and word_with_guesses from @game.
   get '/show' do
     ### YOUR CODE HERE ###
+    status = @game.check_win_or_lose
+    redirect '/win' if status == :win
+    redirect '/lose' if status == :lose
     erb :show # You may change/remove this line
   end
   
   get '/win' do
     ### YOUR CODE HERE ###
+    status = @game.check_win_or_lose
+    redirect '/show' if status == :play
+    redirect '/lose' if status == :lose
     erb :win # You may change/remove this line
   end
   
   get '/lose' do
     ### YOUR CODE HERE ###
+    status = @game.check_win_or_lose
+    redirect '/show' if status == :play
+    redirect '/win' if status == :win
     erb :lose # You may change/remove this line
   end
   
