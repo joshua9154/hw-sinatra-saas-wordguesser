@@ -64,8 +64,9 @@ class WordGuesserGame
 
   def display()
     i=0
-    j=0
+   
     while i < word.size
+      j=0
       while j < guesses.size
          if guesses[j] == word[i]
             @word_with_guesses[i]= guesses[j]
@@ -92,6 +93,7 @@ class WordGuesserGame
     @wrong_guesses= game.wrong_guesses
    # @word_with_guesses=  '-' * game.word.size
     a =0
+    
     while a< manyGuess.size
        guess(manyGuess[a])
        a+=1
