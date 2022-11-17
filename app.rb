@@ -31,9 +31,6 @@ class WordGuesserApp < Sinatra::Base
     # NOTE: don't change previous line - it's needed by autograder!
     
     @game = WordGuesserGame.new(word)
-    #session[:word] = word
-    #session[:guesses] = ''
-    #session[:wrong_guesses] = ''
     redirect '/show'
   end
   
@@ -93,6 +90,7 @@ class WordGuesserApp < Sinatra::Base
     status = @game.check_win_or_lose
     redirect '/show' if status == :play
     redirect '/lose' if status == :lose
+    @message = session.delete(:message)
     erb :win # You may change/remove this line
   end
   
@@ -101,7 +99,10 @@ class WordGuesserApp < Sinatra::Base
     status = @game.check_win_or_lose
     redirect '/show' if status == :play
     redirect '/win' if status == :win
+    @message = session.delete(:message)
     erb :lose # You may change/remove this line
   end
+
+  
   
 end

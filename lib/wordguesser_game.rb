@@ -7,8 +7,11 @@ class WordGuesserGame
   attr_accessor :word,:guesses, :wrong_guesses , :word_with_guesses
 
   def initialize(word)
-    
-    @word = 'apple'
+    theWord='apple'
+    if word.size()>1
+      theWord=word
+    end    
+    @word = theWord
     @guesses =''
     @wrong_guesses = ''
    # @word_with_guesses = word
