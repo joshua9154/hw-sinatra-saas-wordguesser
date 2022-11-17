@@ -8,7 +8,7 @@ class WordGuesserGame
 
   def initialize(word)
      
-    @word = theWord
+    @word = word
     @guesses =''
     @wrong_guesses = ''
    # @word_with_guesses = word
