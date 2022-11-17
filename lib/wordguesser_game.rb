@@ -8,10 +8,11 @@ class WordGuesserGame
 
   def initialize(word)
     
-    @word = word
+    @word = 'apple'
     @guesses =''
     @wrong_guesses = ''
-    @word_with_guesses = '-' * word.size
+   # @word_with_guesses = word
+    @word_with_guesses = '-' * @word.size()
   end
 
 
@@ -28,7 +29,7 @@ class WordGuesserGame
   def checkCorrect(letter)
     i=0
     while i < word.size
-      if letter.downcase == word[i].downcase 
+      if letter.downcase == @word[i].downcase 
         if checkUsed(letter)
          @guesses +=letter.downcase
          return true
@@ -41,19 +42,26 @@ class WordGuesserGame
 
   def checkUsed(letter)
     j=0
-    while j<guesses.size
-      if letter.downcase == guesses[j].downcase
+    while j<@guesses.size
+      if letter.downcase == @guesses[j].downcase
         return false
       end
      j +=1 
+    end 
+    i=0
+    while i<@wrong_guesses.size
+      if letter.downcase == @wrong_guesses[i].downcase
+        return false
+      end
+     i +=1 
     end 
     return true;
   end
 
   def addFalse(letter)
     k=0
-    while k< wrong_guesses.size
-      if letter.downcase == wrong_guesses[k].downcase
+    while k< @wrong_guesses.size
+      if letter.downcase == @wrong_guesses[k].downcase
         return false
       end
      k +=1 
@@ -64,18 +72,28 @@ class WordGuesserGame
 
   def display()
     i=0
-   
-    while i < word.size
+    result=""
+    
+    while i < @word.size()
       j=0
-      while j < guesses.size
-         if guesses[j] == word[i]
-            @word_with_guesses[i]= guesses[j]
+      
+      while j < @guesses.size()
+         if @guesses[j] == @word[i]
+           # w=@word[i]
+            #@word_with_guesses.replaceAt(i,(@word[i]));
+          #  @word_with_guesses= setCharAt(@word_with_guesses,i,w.stringify());
+           # @word_with_guesses.insert i, @guesses[j]
+           result+=  @word[i]
+         
          end 
        j+=1
       end
+     if result.size()<=i
+        result+="-"
+     end  
      i +=1 
     end 
-    
+    @word_with_guesses=result
   end  
 
   def validate(letter)
@@ -97,10 +115,10 @@ class WordGuesserGame
   end 
   
   def  guess_several_letters(game, manyGuess)
-    @word = game.word
-    @guesses = game.guesses
-    @wrong_guesses= game.wrong_guesses
-   # @word_with_guesses=  '-' * game.word.size
+    @word = word
+    @guesses = guesses
+    @wrong_guesses= wrong_guesses
+    @word_with_guesses=  '-' * @word.size()
     a =0
     
     while a< manyGuess.size
@@ -111,17 +129,23 @@ class WordGuesserGame
     
   end
   def check_win_or_lose()
-    if @guesses.size()>6
-      return "lose"
+    if @wrong_guesses.size()>6
+      return :lose
     end  
-    i =0
-   while i< word.size()
-    if word_with_guesses[i]== '-'
-      return "play"
+    if @word.size<2
+      return :play
     end  
-    i+=0 
-   end 
-   return "win"
+    if @word_with_guesses == @word
+      return :win
+    end  
+  #  i =0
+  # while i< @word.size()
+  #  if @word_with_guesses[i]== '-'
+  #    return :play
+ #   end  
+ #   i+=0 
+ #  end 
+   return :play
   end  
   # You can test it by installing irb via $ gem install irb
   # and then running $ irb -I. -r app.rb
@@ -130,15 +154,14 @@ class WordGuesserGame
   def self.get_random_word
     require 'uri'
     require 'net/http'
-    uri = URI('http://watchout4snakes.com/wo4snakes/Random/RandomWord')
-    Net::HTTP.post_form(uri ,{}).body
-   # require 'uri'
-   # require 'net/http'
-   # uri = URI('http://randomword.saasbook.info/RandomWord')
-   # Net::HTTP.new('randomword.saasbook.info').start { |http|
-   #   return http.post(uri, "").body
-   # }
+    uri = URI('http://randomword.saasbook.info/RandomWord')
+    Net::HTTP.new('randomword.saasbook.info').start { |http|
+      return http.post(uri, "").body
+    }
+  
+ 
   end
-
 end
+
+
 

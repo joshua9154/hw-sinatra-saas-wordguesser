@@ -22,15 +22,14 @@ class WordGuesserApp < Sinatra::Base
   end
   
   get '/new' do
-    
-      "Hello World"
+    erb :new
   end
   
   post '/create' do
     # NOTE: don't change next line - it's needed by autograder!
     word = params[:word] || WordGuesserGame.get_random_word
     # NOTE: don't change previous line - it's needed by autograder!
-
+    
     @game = WordGuesserGame.new(word)
     #session[:word] = word
     #session[:guesses] = ''
@@ -62,9 +61,14 @@ class WordGuesserApp < Sinatra::Base
    #   session[:wrong_guesses] = @game.wrong_guesses
    #  end 
      begin
-      response = @game.guess(letter)
-      flash[:message] = 'You have already used that letter.' if !response
-    rescue ArgumentError
+      if !@game.checkUsed(letter)
+        flash[:message] = 'You have already used that letter.'
+      end  
+    
+         @game.guess(letter)
+      
+      
+     rescue ArgumentError
       flash[:message] = 'Invalid guess.'
     end
    
